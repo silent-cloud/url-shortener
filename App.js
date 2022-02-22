@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import { setString as cb } from 'expo-clipboard';
 
 export default function App() {
   const [ tUrl, setTUrl ] = useState('');
@@ -53,7 +54,7 @@ export default function App() {
       {
         showBtn ? (
           <View>
-          <TouchableOpacity style={styles.shortUrlButton}>
+          <TouchableOpacity style={styles.shortUrlButton} onPress={() => {cb(tUrl)}}>
             <Text style={styles.shortUrlButtonText}>{tUrl}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.shortUrlButton} onPress={() => {
