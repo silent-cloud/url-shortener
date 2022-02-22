@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "url-shortener",
+    "slug": "url-shortener",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
