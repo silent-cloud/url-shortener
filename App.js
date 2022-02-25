@@ -2,12 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { setString as cb } from 'expo-clipboard';
-import { Button, Box, Input, NativeBaseProvider, Text, TextInput, TouchableOpacity, VStack } from 'native-base';
+import { Button, Box, Input, NativeBaseProvider, Text, VStack } from 'native-base';
 import axios from 'axios';
 
 export default function App() {
+  const [ urlList, setUrlList ] = useState([]);
   const [ urlSubmitted, setUrlSubmitted ] = useState('');
-  const [ tUrl, setTUrl ] = useState('');
   const [ showBtn, setShowBtn ] = useState(false);
   const { control, handleSubmit, formState: {errors, isValid}, reset } = useForm({mode: 'onBlur'});
   const onSubmit = data => {
@@ -25,12 +25,14 @@ export default function App() {
             {
               headers: {
                 Accept: 'application/json',
-                Authorization: 'Bearer <token>',
+                Authorization: 'Bearer XxlEynmrIYt660DKP81LlDcd19YkV0wjxzp4tjSQdKuNHUOCtWSUWtYa8L41',
                 'Content-Type': 'application/json'
               }
             }
           ).then((response) => {
-            setTUrl(response.data.data.tiny_url);
+            const newUrlList = urlList.slice();
+            newUrlList.push(response.data.data.tiny_url);
+            setUrlList(newUrlList);
             setShowBtn(true);
           })
         } catch (e) {
@@ -39,14 +41,13 @@ export default function App() {
       }
       fetch();
     } else {
-      setTUrl('');
       setShowBtn(false);
     }
-  });
+  }, [urlSubmitted]);
 
   return (
     <NativeBaseProvider>
-      <VStack flex={1} bg="white" space='2' alignItems='center'>
+      <VStack height='full' space='2' alignItems='center'>
         <Box marginTop='12%'>
           <Text fontSize='2xl'>url-shortener.js</Text>
         </Box>
@@ -67,24 +68,32 @@ export default function App() {
                 />
               )}
             />
-            <Button size='lg' onPress={handleSubmit(onSubmit)}>Submit</Button>
-            {
-              showBtn ? (
-                <VStack space={2}>
-                  <Button size='md' colorScheme='green' onPress={() => {cb(tUrl)}}>{tUrl}</Button>
-                  <Button size='md' colorScheme='red' onPress={() => {
-                    setUrlSubmitted('')
-                    setTUrl('');
-                    setShowBtn(false);
-                    reset({
-                      inputUrl: ''
-                    });
-                  }}>Clear</Button>
-                </VStack>
-              ) : null
-            }
+            <VStack space={2}>
+              <Button size='lg' onPress={handleSubmit(onSubmit)}>Submit</Button>
+              {
+                showBtn ? (
+                    <Button size='lg' colorScheme='red' onPress={() => {
+                      setUrlSubmitted('')
+                      setUrlList([]);
+                      setShowBtn(false);
+                      reset({
+                        inputUrl: ''
+                      });
+                    }}>Clear</Button>
+                ) : null
+              }
+            </VStack>
           </VStack>
           <StatusBar style="auto" />
+        </Box>
+        <Box flex={1} width='90%' borderWidth='1' borderColor='coolGray.200' rounded='lg' alignItems='center' marginBottom='5%'>
+          <VStack width="98%" space={2} padding={2}>
+            {
+                urlList.map(url => {
+                  return <Button size='md' colorScheme='green' onPress={() => {cb(url)}}>{url}</Button>
+                })
+            }
+          </VStack>
         </Box>
       </VStack>
     </NativeBaseProvider>
