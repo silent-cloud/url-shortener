@@ -60,6 +60,7 @@ export default function App() {
                   <Input
                     size='md'
                     borderColor='coolGray.500'
+                    color='white'
                     placeholder='Enter your url here'
                     value={value}
                     onblur={onBlur}
