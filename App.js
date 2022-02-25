@@ -1,8 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { setString as cb } from 'expo-clipboard';
-import { Button, Box, Input, NativeBaseProvider, Text, VStack } from 'native-base';
+import { Button, Box, Input, NativeBaseProvider, StatusBar, Text, VStack } from 'native-base';
 import axios from 'axios';
 
 export default function App() {
@@ -47,54 +46,57 @@ export default function App() {
 
   return (
     <NativeBaseProvider>
-      <VStack height='full' space='2' alignItems='center'>
-        <Box marginTop='12%'>
-          <Text fontSize='2xl'>url-shortener.js</Text>
+      <VStack height='full' alignItems='center'>
+        <Box width='100%' alignItems='center' bg='black'>
+          <Text marginTop='3%' fontSize='2xl' color='white' padding='2'>url-shortener.js</Text>
         </Box>
-        <Box w='90%' justifyContent='space-between'>
-          <VStack space={4}>
-            <Controller
-              control={control}
-              name='inputUrl'
-              render={({field: {onChange, value, onBlur}}) => (
-                <Input
-                  size='md'
-                  placeholder='Enter your url here'
-                  value={value}
-                  onblur={onBlur}
-                  onChangeText={value => onChange(value)}
-                  keyboardType='email-address'
-                  onEndEditing={handleSubmit(onSubmit)}
-                />
-              )}
-            />
+        <VStack flex={1} w='100%' alignItems='center' bg='#2C2F33' space={2}>
+          <Box w='90%' justifyContent='space-between' marginTop='2%'>
             <VStack space={2}>
-              <Button size='lg' onPress={handleSubmit(onSubmit)}>Submit</Button>
+              <Controller
+                control={control}
+                name='inputUrl'
+                render={({field: {onChange, value, onBlur}}) => (
+                  <Input
+                    size='md'
+                    borderColor='coolGray.500'
+                    placeholder='Enter your url here'
+                    value={value}
+                    onblur={onBlur}
+                    onChangeText={value => onChange(value)}
+                    keyboardType='email-address'
+                    onEndEditing={handleSubmit(onSubmit)}
+                  />
+                )}
+              />
+              <VStack space={2}>
+                <Button size='lg' onPress={handleSubmit(onSubmit)}>Submit</Button>
+                {
+                  showBtn ? (
+                      <Button size='lg' colorScheme='red' onPress={() => {
+                        setUrlSubmitted('')
+                        setUrlList([]);
+                        setShowBtn(false);
+                        reset({
+                          inputUrl: ''
+                        });
+                      }}>Clear</Button>
+                  ) : null
+                }
+              </VStack>
+            </VStack>
+            <StatusBar barStyle='light-content'/>
+          </Box>
+          <Box flex={1} width='90%' borderWidth='1' borderColor='coolGray.500' rounded='lg' alignItems='center' marginBottom='5%'>
+            <VStack width="98%" space={2} padding={2}>
               {
-                showBtn ? (
-                    <Button size='lg' colorScheme='red' onPress={() => {
-                      setUrlSubmitted('')
-                      setUrlList([]);
-                      setShowBtn(false);
-                      reset({
-                        inputUrl: ''
-                      });
-                    }}>Clear</Button>
-                ) : null
+                  urlList.map((url, i) => {
+                    return <Button size='md' colorScheme='green' onPress={() => {cb(url)}} key={i}>{url}</Button>
+                  })
               }
             </VStack>
-          </VStack>
-          <StatusBar style="auto" />
-        </Box>
-        <Box flex={1} width='90%' borderWidth='1' borderColor='coolGray.200' rounded='lg' alignItems='center' marginBottom='5%'>
-          <VStack width="98%" space={2} padding={2}>
-            {
-                urlList.map(url => {
-                  return <Button size='md' colorScheme='green' onPress={() => {cb(url)}}>{url}</Button>
-                })
-            }
-          </VStack>
-        </Box>
+          </Box>
+        </VStack>
       </VStack>
     </NativeBaseProvider>
   );
