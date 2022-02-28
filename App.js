@@ -24,7 +24,7 @@ export default function App() {
             {
               headers: {
                 Accept: 'application/json',
-                Authorization: 'Bearer <token>',
+                Authorization: 'Bearer i8kmLYzKsLA8UrEpp3eOp7VOLTlYmTQsdpPrC6J7yMSTu29kHmDXmgmiNC1E',
                 'Content-Type': 'application/json'
               }
             }
@@ -58,7 +58,7 @@ export default function App() {
                 name='inputUrl'
                 render={({field: {onChange, value, onBlur}}) => (
                   <Input
-                    size='md'
+                    size='2xl'
                     borderColor='coolGray.500'
                     color='white'
                     placeholder='Enter your url here'
