@@ -24,7 +24,7 @@ export default function App() {
             {
               headers: {
                 Accept: 'application/json',
-                Authorization: 'Bearer i8kmLYzKsLA8UrEpp3eOp7VOLTlYmTQsdpPrC6J7yMSTu29kHmDXmgmiNC1E',
+                Authorization: 'Bearer <token>',
                 'Content-Type': 'application/json'
               }
             }
